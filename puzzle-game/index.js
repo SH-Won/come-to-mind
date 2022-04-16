@@ -103,7 +103,7 @@ class Game{
             li.style.width = `${width}px`;
             li.style.height = `${width}px`;
             li.style.border = `0.5px solid white`;
-            li.style.background = `top -${width*dy}px left -${width*dx}px / ${containerSize}px ${containerSize}px url("insert your image url")`;
+            li.style.background = `top -${width*dy}px left -${width*dx}px / ${containerSize}px ${containerSize}px url("insert your img Url")`;
             return li;
         });
         return tiles;
@@ -132,7 +132,7 @@ class Game{
     }
 }
 const init = () =>{
-    const size = 5; // you can choose puzzle matrix size (ex. size * size matrix);
+    const size = 8; // you can choose puzzle matrix size (ex. size * size matrix);
     const root = document.querySelector('#root');
     new Game(root,size).init();
 }

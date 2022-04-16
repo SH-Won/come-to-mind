@@ -1,0 +1,81 @@
+*{
+    margin:0;
+    padding:0;
+}
+#root{
+    width:100%;
+}
+.ItemListPage{
+    width:90%;
+    height:100%;
+}
+.itemList{
+    width:100%;
+    height: 100%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
+}
+.item{
+    position: relative;
+    padding-top: 100%;
+    flex : 0 0 22%;
+    margin:0.8rem;
+}
+.item > img{
+    position:absolute;
+    top:0;
+    width:100%;
+    height:100%;
+}
+
+/* loading */
+.loadingComponent{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loadingItem{
+    width:10vw;
+    height:10vw;
+    background-color: gray;
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: fade-in-out 500ms ease infinite;
+    margin : .5rem 1.5rem
+}
+.loadingItem:nth-child(1){
+    animation-delay: 10ms;
+}
+.loadingItem:nth-child(2){
+    animation-delay: 20ms;
+}
+.loadingItem:nth-child(3){
+    animation-delay: 30mss;
+}
+.loadingItem:nth-child(4){
+    animation-delay: 40ms;
+}
+@keyframes fade-in-out {
+    0%{
+        opacity: 0.1;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0.1;
+    }
+    
+}
+
+@keyframes appear {
+    from{
+        opacity: 0.2;
+    }
+    to{
+        opacity: 1;
+    }
+}
