@@ -1,6 +1,4 @@
-const datas =[
-   ' insert your image url'
-]
+const datas = [ 'insert your image url']
 class InfinityScroll{
     constructor(element,loading,hasMore,callback){
         this.state = {
@@ -11,23 +9,21 @@ class InfinityScroll{
         }
         this.observer = null;
     }
-    handleScorll = (([entry],ob) =>{
-        if(entry.isIntersecting && this.hasMore){
-            console.log('handle');
-            this.callback();
-            ob.unobserve(entry.target);
-        }
-    })
+
     setState = (nextState) =>{
         this.state = nextState;
-        console.log(this.state);
         this.exc();
     }
     exc = () =>{
-        if(this.loading) return;
-        this.observer = new IntersectionObserver(this.handleScorll,{threshold:0.9});
-        if(this.element) this.observer.observe(this.element);
-        console.log(this.element);
+        if(this.state.loading) return;
+        this.observer = new IntersectionObserver((([entry],ob) =>{
+            if(entry.isIntersecting && this.state.hasMore){
+                console.log('handle');
+                this.state.callback();
+                ob.unobserve(entry.target);
+            }
+        }),{threshold:0.8});
+        if(this.state.element) this.observer.observe(this.state.element);
     }
 }
 class Loading{
@@ -67,7 +63,9 @@ class ItemList{
         this.$List.innerHTML = `
         ${this.items.map(item => `
         <div class="item">
+        <div class="item-img-container">
         <img src="${item}" />
+        </div>
         </div>
         `).join('')}
         `
@@ -89,7 +87,7 @@ class ItemListPage{
         this.$target.appendChild(this.$page);
     }
     init = () =>{
-        this.$page.className ='ItemListPage';
+        this.$page.className ='itemListPage';
         this.loading = new Loading(this.$target,this.state.loading);
         this.infinityScroll = new InfinityScroll(null,this.state.loading,null,null);
         this.getItem();
@@ -97,24 +95,19 @@ class ItemListPage{
     }
     setState = (nextState) =>{
         this.state = nextState;
-        console.log(this.state);
         this.loading.setState(this.state.loading);
-        // console.log(this.$page.lastElementChild)
-    
         this.render();
     }
     render = () =>{
         if(!this.state.items.length) return;
         this.$page.innerHTML = '';
         new ItemList(this.$page,this.state.items).render();
-        console.log(this.$page.firstElementChild.lastElementChild);
         this.infinityScroll.setState({
             element: this.$page.firstElementChild.lastElementChild,
             loading: this.state.loading,
             hasMore:this.state.hasMore,
             callback: this.getItem,
         })
-        console.log(this.infinityScroll.state)
     }
     getItem = async () =>{
         try{
@@ -158,4 +151,3 @@ class App{
     }
 }
 new App(document.querySelector('#root')).init();
-
