@@ -1,0 +1,29 @@
+*{
+    margin:0;
+    padding:0;
+}
+#root{
+    width:100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.playGround{
+    width:60%;
+    display: flex;
+    flex-direction: column;
+}
+ul{
+    list-style: none;
+    display:flex;
+    width:100%;
+    height:inherit
+}
+li{
+    list-style: none;
+    border:0.5px solid gray;
+    width:100%;
+}
+li.tree.moving{
+    background-color: green;
+}
