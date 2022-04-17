@@ -24,6 +24,21 @@ li{
     border:0.5px solid gray;
     width:100%;
 }
-li.tree.moving{
+li.tree{
     background-color: green;
+}
+li.square{
+    background-color: red;
+}
+li.z{
+    background-color: blue;
+}
+li.line{
+    background-color: aquamarine;
+}
+li.rightL{
+    background-color: blueviolet;
+}
+li.leftL{
+    background-color: brown;
 }
