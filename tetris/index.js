@@ -6,8 +6,23 @@ class Tetris{
         this.movingBlock = null;
         this.tempMovingBlock = null;
         this.interval = null;
+        this.statusBoard = document.createElement('div');
+        this.score = null;
     }
-    init = () =>{
+    init = (re=null) =>{
+        clearInterval(this.interval);
+        
+        this.$target.innerHTML = '';
+        this.playGround.innerHTML = '';
+        this.statusBoard.innerHTML = '';
+        this.score = 0;
+        const span = document.createElement('span');
+        const button = document.createElement('button');
+        button.innerText = '시작';
+        span.innerText = this.score;
+        this.statusBoard.className = 'statusBoard';
+        this.statusBoard.append(span,button);
+        this.$target.appendChild(this.statusBoard);
         this.$target.appendChild(this.playGround);
         this.playGround.className= 'playGround';
         this.playGround.style.width = `${this.$target.offsetWidth*0.5}px`;
@@ -16,8 +31,8 @@ class Tetris{
         for(let i=0; i<ROW; i++){
             playGround.prepend( this.prependLine());
         }
+        if(!re)
         this.event();
-        this.createBlock();
     }
     prependLine = () =>{
         const {COL} = this;
@@ -41,6 +56,9 @@ class Tetris{
             const target = this.playGround.childNodes[ny] ? this.playGround.childNodes[ny].children[0].childNodes[nx] : null;
             if(!target || target.classList.contains('seize')){
                 this.tempMovingBlock = {...this.movingBlock};
+                if(moveType === 're'){
+                    return this.endGame();
+                }
                 setTimeout(()=>{
                     this.renderBlock('re');
                     if(moveType ==='top'){
@@ -54,6 +72,19 @@ class Tetris{
         })
         this.movingBlock = {...this.tempMovingBlock};
     }
+    endGame = () =>{
+        clearInterval(this.interval);
+        const component = document.createElement('div');
+        const span = document.createElement('span');
+        const button = document.createElement('button');
+        button.className = 'endBtn';
+        component.className = 'end';
+        span.innerText = 'GAME OVER';
+        span.style.color = 'white';
+        button.innerText = 'RE START';
+        component.append(span,button);
+        this.$target.appendChild(component);
+    }
     seizeBlock = () =>{
         const currentBlock = document.querySelectorAll('.moving');
         currentBlock.forEach(block => (block.classList.remove('moving'), block.classList.add('seize')))
@@ -64,12 +95,16 @@ class Tetris{
         const rowPos = Array.from(new Set(this.BLOCKS[type][direction].map(([y,x]) => y+top))).sort((a,b) => a-b);
         // console.log(rowPos)
         // console.log(this.playGround.childNodes[14].children[0].childNodes);
+        let totalScore = this.score;
         rowPos.forEach(y =>{
             if([...this.playGround.childNodes[y].children[0].childNodes].every(child => child.classList.contains('seize'))){
                 this.playGround.childNodes[y].remove();
                 this.playGround.prepend(this.prependLine());
+                totalScore+=10;
             }
         })
+        this.score = totalScore
+        this.statusBoard.childNodes[0].innerText = this.score;
         this.createBlock();
     }
     createBlock = () =>{
@@ -105,7 +140,6 @@ class Tetris{
     }
     event = () =>{
         document.addEventListener('keydown',e =>{
-            console.log(e.keyCode);
             switch(e.keyCode){
                 case 37 : return this.moveBlock('left',-1);
                 case 39 : return this.moveBlock('left',1);
@@ -114,6 +148,19 @@ class Tetris{
                 case 32 : return this.dropBlock();
                 default : break;
             }
+        })
+        this.statusBoard.addEventListener('click',e =>{
+            if(e.target.tagName ==='BUTTON'){
+            if(e.target.textContent ==='시작'){
+                this.createBlock();
+                e.target.style.display ='none';
+            }
+        }
+        })
+        document.addEventListener('click',e =>{
+            if(e.target.className !=='endBtn') return;
+            document.querySelector('.end').remove();
+            this.init(true);
         })
     }
 }
